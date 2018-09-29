@@ -29,13 +29,11 @@ public class StickersTest {
     public void stickers() {
         try {
             String[] boxes = {"box-most-popular", "box-campaigns", "box-latest-products"};
-            int count = 0;
             driverChrome.get("http://localhost/litecart/");
             for (String box : boxes){
-                String cssSel = "#" + box + " li.product.column.shadow.hover-light";
+                String cssSel = "#" + box + " li.product";
                 int productCount = driverChrome.findElements(By.cssSelector(cssSel)).size();
                 for (int i = 1; i<=productCount; i++){
-                    count++;
                     List<WebElement> stickers = driverChrome.findElements(By.cssSelector(cssSel + ":nth-child(" + i + ") .sticker"));
                     if (stickers == null  |
                             stickers.size()>1) {
