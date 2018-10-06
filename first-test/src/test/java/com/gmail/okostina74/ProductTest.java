@@ -45,6 +45,12 @@ public class ProductTest {
         }
     }
 
+    //* this method format String value of a font-size attribute to Integer
+    public Double formatFontSize(String fontSize) {
+        Double size = Double.parseDouble(fontSize.split("px")[0]);
+        return size;
+    }
+
     //* this is general test, which is run for each browser. It checks:
     //* 1. Prices must be equal on main and product page
     //* 2. Names must be equal on main and product page
@@ -69,9 +75,13 @@ public class ProductTest {
                     WebElement price = products.get(i).findElement(By.cssSelector(".regular-price"));
                     checkPrices(price,PRICE_REGULAR, nameMain, driver);
                     regPriceMain = price.getText();
+                    String regPriceMainSize = price.getCssValue("font-size");
                     price = products.get(i).findElement(By.cssSelector(".campaign-price"));
                     camPriceMain = price.getText();
                     checkPrices(price, PRICE_CAMPAIGNS, nameMain, driver);
+                    String camPriceMainSize = price.getCssValue("font-size");
+                    if (formatFontSize(regPriceMainSize) >= formatFontSize(camPriceMainSize))
+                        fail ("Regular price more or equal campaign price on main page for product: " + nameMain + ", browser: " + driver.getName());
                 }
                 if (driver.getName().equals(DriverBase.IE)) products.get(i).findElement(By.cssSelector(".link")).sendKeys(Keys.RETURN);
                 else products.get(i).click();
@@ -86,9 +96,13 @@ public class ProductTest {
                         WebElement price = driver.getDriver().findElement(By.cssSelector(".information .regular-price"));
                         regPriceProduct = price.getText();
                         checkPrices(price,PRICE_REGULAR, nameProduct, driver);
+                        String regPriceSize = price.getCssValue("font-size");
                         price = driver.getDriver().findElement(By.cssSelector(".information .campaign-price"));
                         camPriceProduct = price.getText();
                         checkPrices(price, PRICE_CAMPAIGNS, nameProduct, driver);
+                        String camPriceSize = price.getCssValue("font-size");
+                        if (formatFontSize(regPriceSize) >= formatFontSize(camPriceSize))
+                            fail ("Regular price more or equal campaign price on product page for product: " + nameMain + ", browser: " + driver.getName());
                     }
                     else {
 
