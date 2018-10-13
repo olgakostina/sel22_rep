@@ -48,12 +48,12 @@ public class Helpers {
         return size;
     }
 
-    public static void loginAdmin(WebDriver driver) throws WebDriverException {
+    public static void loginAdmin(DriverBase driver) throws WebDriverException {
         WebDriverWait wait;
-        wait = new WebDriverWait(driver, 10);
-        driver.findElement(By.name("username")).sendKeys("admin");
-        driver.findElement(By.name("password")).sendKeys("admin");
-        driver.findElement(By.name("login")).click();
+        wait = new WebDriverWait(driver.getDriver(), 10);
+        driver.getDriver().findElement(By.name("username")).sendKeys("admin");
+        driver.getDriver().findElement(By.name("password")).sendKeys("admin");
+        click(driver.getDriver().findElement(By.name("login")),driver);
         wait.until(titleIs("My Store"));
     }
 
@@ -62,7 +62,7 @@ public class Helpers {
         webElement.sendKeys(str);
     }
     public static void enterText(WebElement webElement, String str, boolean preFormat) {
-    //    webElement.clear();
+        webElement.clear();
         webElement.sendKeys(Keys.HOME + str);
     }
     public static void click(WebElement el, DriverBase driver){
@@ -71,4 +71,18 @@ public class Helpers {
         else
             el.click();
     }
+
+    public static void checkElement (WebElement el){
+        String atr = el.getAttribute("checked");
+        if (atr == null) {
+            el.click();
+        }
+    }
+    public static void uncheckCheckBox (WebElement el) {
+        String atr = el.getAttribute("checked");
+        if (atr != null && atr.equals("true")) {
+            el.click();
+        }
+    }
+
 }
