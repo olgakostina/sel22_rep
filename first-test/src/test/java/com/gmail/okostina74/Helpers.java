@@ -1,8 +1,10 @@
 package com.gmail.okostina74;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
@@ -50,13 +52,13 @@ public class Helpers {
         return size;
     }
 
-    public static void loginAdmin(DriverBase driver) throws WebDriverException {
+    public static void loginAdmin(DriverBase driver, String title) throws WebDriverException {
         WebDriverWait wait;
         wait = new WebDriverWait(driver.getDriver(), 10);
         driver.getDriver().findElement(By.name("username")).sendKeys("admin");
         driver.getDriver().findElement(By.name("password")).sendKeys("admin");
         click(driver.getDriver().findElement(By.name("login")),driver);
-        wait.until(titleIs("My Store"));
+        wait.until(titleIs(title));
     }
 
     public static void enterText(WebElement webElement, String str) {
@@ -97,4 +99,16 @@ public class Helpers {
         }
     }
 
+    public static ExpectedCondition<String> thereIsWindowOtherThan(final Set<String> oldHandles) {
+        return new ExpectedCondition<String>() {
+            @Override
+            public String apply(WebDriver driver) {
+                Set<String> handles = driver.getWindowHandles();
+                handles.removeAll(oldHandles);
+                return handles.size() > 0 ? handles.iterator().next() : null;
+            }
+        };
+    }
 }
+
+
