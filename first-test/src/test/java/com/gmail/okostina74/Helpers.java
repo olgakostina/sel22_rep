@@ -3,6 +3,8 @@ package com.gmail.okostina74;
 import org.openqa.selenium.*;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.concurrent.TimeUnit;
+
 import static org.openqa.selenium.support.ui.ExpectedConditions.titleIs;
 
 //this class contains different little functions with small functionality.
@@ -82,6 +84,16 @@ public class Helpers {
         String atr = el.getAttribute("checked");
         if (atr != null && atr.equals("true")) {
             el.click();
+        }
+    }
+
+    public static boolean isElementPresent(WebDriver driver, By locator){
+        try{
+            driver.manage().timeouts().implicitlyWait(0,TimeUnit.SECONDS);
+            return driver.findElements(locator).size() > 0;
+        }
+        finally {
+            driver.manage().timeouts().implicitlyWait(10,TimeUnit.SECONDS);
         }
     }
 
